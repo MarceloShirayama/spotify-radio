@@ -1,0 +1,16 @@
+{
+  "name": "spotify-radio",
+  "version": "1.0.0",
+  "description": "Seja bem vindo(a) à sexta Semana Javascript Expert. Este é o código inicial para iniciar nossa jornada.",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": "17"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
