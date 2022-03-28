@@ -136,6 +136,21 @@ describe('#Routes - test site from API response', () => {
       expect(params.response.end).toHaveBeenCalled()
     })
 
-    it.todo('given an error it should respond with 500')
+    it('should returns 500 if any other error occurs', async () => {
+      const params = TestUtil.defaultHandleParams()
+      params.request.method = 'GET'
+      params.request.url = '/inexistent.ext'
+
+      jest
+        .spyOn(Controller.prototype, Controller.prototype.getFileStream.name)
+        .mockImplementationOnce(() => {
+          throw new Error('Error')
+        })
+
+      await handler(...params.values())
+
+      expect(params.response.writeHead).toHaveBeenCalledWith(500)
+      expect(params.response.end).toHaveBeenCalled()
+    })
   })
 })
