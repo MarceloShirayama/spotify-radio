@@ -20,5 +20,10 @@ export const config = {
   },
   location: {
     home: `/home`
+  },
+  contentType: {
+    '.html': 'text/html',
+    '.css': 'text/css',
+    '.js': 'text/javascript'
   }
 }

@@ -26,6 +26,10 @@ async function routes(req, res) {
 
   if (method === 'GET') {
     const { stream, type } = await controller.getFileStream(url)
+    const contentType = config.contentType[type]
+    if (contentType) {
+      res.writeHead(200, { 'Content-Type': contentType })
+    }
     return stream.pipe(res)
   }
 
