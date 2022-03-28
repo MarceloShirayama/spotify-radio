@@ -15,8 +15,8 @@ export const config = {
     fx: join(root, 'audio', 'fx')
   },
   pages: {
-    home: `home/index.html`,
-    controller: `controller/index.html`
+    home: 'home/index.html',
+    controller: 'controller/index.html'
   },
   location: {
     home: `/home`
