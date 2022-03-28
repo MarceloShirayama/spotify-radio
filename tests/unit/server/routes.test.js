@@ -63,7 +63,28 @@ describe('#Routes - test site from API response', () => {
     expect(mockFileStream.pipe).toHaveBeenCalledWith(params.response)
   })
 
-  it.todo('GET /index.html - should response with file stream')
+  it('GET /index.html - should response with file stream', async () => {
+    const params = TestUtil.defaultHandleParams()
+    const filename = 'index.html'
+    const expectedType = '.' + filename.split('.').pop()
+    console.log('expectedType', expectedType)
+    params.request.method = 'GET'
+    params.request.url = filename
+
+    const mockFileStream = TestUtil.generateReadableStream(['test'])
+    jest
+      .spyOn(Controller.prototype, Controller.prototype.getFileStream.name)
+      .mockReturnValueOnce({ stream: mockFileStream, type: expectedType })
+    jest.spyOn(mockFileStream, 'pipe').mockImplementationOnce(() => {})
+
+    await handler(...params.values())
+
+    expect(Controller.prototype.getFileStream).toHaveBeenCalledWith(filename)
+    expect(mockFileStream.pipe).toHaveBeenCalledWith(params.response)
+    expect(params.response.writeHead).toHaveBeenCalledWith(200, {
+      'Content-Type': config.contentType[expectedType]
+    })
+  })
 
   it.todo('GET /file.ext - should response with file stream')
 
