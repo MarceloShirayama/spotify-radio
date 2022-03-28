@@ -65,9 +65,8 @@ describe('#Routes - test site from API response', () => {
 
   it('GET /index.html - should response with file stream', async () => {
     const params = TestUtil.defaultHandleParams()
-    const filename = 'index.html'
+    const filename = '/index.html'
     const expectedType = '.' + filename.split('.').pop()
-    console.log('expectedType', expectedType)
     params.request.method = 'GET'
     params.request.url = filename
 
@@ -86,7 +85,25 @@ describe('#Routes - test site from API response', () => {
     })
   })
 
-  it.todo('GET /file.ext - should response with file stream')
+  it('GET /file.ext - should response with file stream', async () => {
+    const params = TestUtil.defaultHandleParams()
+    const filename = '/file.ext'
+    const expectedType = '.' + filename.split('.').pop()
+    params.request.method = 'GET'
+    params.request.url = filename
+
+    const mockFileStream = TestUtil.generateReadableStream(['test'])
+    jest
+      .spyOn(Controller.prototype, Controller.prototype.getFileStream.name)
+      .mockReturnValueOnce({ stream: mockFileStream, type: expectedType })
+    jest.spyOn(mockFileStream, 'pipe').mockImplementationOnce(() => {})
+
+    await handler(...params.values())
+
+    expect(Controller.prototype.getFileStream).toHaveBeenCalledWith(filename)
+    expect(mockFileStream.pipe).toHaveBeenCalledWith(params.response)
+    expect(params.response.writeHead).not.toHaveBeenCalled()
+  })
 
   it.todo(
     'POST /unknown - given an inexistent route it should response with 404'
