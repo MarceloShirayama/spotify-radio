@@ -1,7 +1,46 @@
-import { describe, expect, it } from '@jest/globals'
+import { beforeEach, describe, expect, it, jest } from '@jest/globals'
+import { config } from '../../../server/config'
+import { handler } from '../../../server/routes'
+import { TestUtil } from '../util/testUtil'
 
-describe('#Routes', () => {
-  it('Should returns true if true', () => {
-    expect(true).toBe(true)
+describe('#Routes - test site from API response', () => {
+  beforeEach(() => {
+    jest.restoreAllMocks()
+    jest.clearAllMocks()
+  })
+
+  it('GET / - should redirect to home page', async () => {
+    const params = TestUtil.defaultHandleParams()
+    params.request.method = 'GET'
+    params.request.url = '/'
+
+    await handler(...params.values())
+
+    expect(params.response.writeHead).toHaveBeenCalledWith(302, {
+      Location: config.location.home
+    })
+  })
+
+  it.todo(`
+    GET /home - should response with ${config.pages.home} file stream
+  `)
+
+  it.todo(`
+    GET /controller - should response with ${config.pages.controller} 
+    file stream
+  `)
+
+  it.todo('GET /index.html - should response with file stream')
+
+  it.todo('GET /file.ext - should response with file stream')
+
+  it.todo(
+    'POST /unknown - given an inexistent route it should response with 404'
+  )
+
+  describe('exceptions', () => {
+    it.todo('given inexistent file it should respond with 404')
+
+    it.todo('given an error it should respond with 500')
   })
 })
