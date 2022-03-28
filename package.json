@@ -7,7 +7,9 @@
   "scripts": {
     "start": "node server/index.js",
     "live-reload": "nodemon server/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' jest --no-cache",
+    "test-watch": "npm run test -- --watch",
+    "test-coverage": "npm run test -- --coverage tests/unit"
   },
   "engines": {
     "node": "17"
@@ -20,6 +22,7 @@
     "pino-pretty": "7.6.0"
   },
   "devDependencies": {
+    "jest": "27.5.1",
     "nodemon": "2.0.15"
   }
 }
