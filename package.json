@@ -8,8 +8,8 @@
     "start": "node server/index.js",
     "live-reload": "nodemon server/index.js",
     "test": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' jest --no-cache",
-    "test-watch": "npm run test -- --watch",
-    "test-coverage": "npm run test -- --coverage tests/unit"
+    "test-watch": "LOG_DISABLED=true npm run test -- --watch",
+    "test-coverage": "LOG_DISABLED=true npm run test -- --coverage tests/unit"
   },
   "engines": {
     "node": "17"
