@@ -42,10 +42,26 @@ describe('#Routes - test site from API response', () => {
     expect(mockFileStream.pipe).toHaveBeenCalledWith(params.response)
   })
 
-  it.todo(`
-    GET /controller - should response with ${config.pages.controller} 
+  it(`GET /controller - should response with ${config.pages.controller} 
     file stream
-  `)
+  `, async () => {
+    const params = TestUtil.defaultHandleParams()
+    params.request.method = 'GET'
+    params.request.url = '/controller'
+
+    const mockFileStream = TestUtil.generateReadableStream(['test'])
+    jest
+      .spyOn(Controller.prototype, Controller.prototype.getFileStream.name)
+      .mockReturnValueOnce({ stream: mockFileStream })
+    jest.spyOn(mockFileStream, 'pipe').mockImplementationOnce(() => {})
+
+    await handler(...params.values())
+
+    expect(Controller.prototype.getFileStream).toHaveBeenCalledWith(
+      config.pages.controller
+    )
+    expect(mockFileStream.pipe).toHaveBeenCalledWith(params.response)
+  })
 
   it.todo('GET /index.html - should response with file stream')
 
