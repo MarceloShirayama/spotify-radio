@@ -119,7 +119,22 @@ describe('#Routes - test site from API response', () => {
   })
 
   describe('exceptions', () => {
-    it.todo('given inexistent file it should respond with 404')
+    it('given inexistent file it should respond with 404', async () => {
+      const params = TestUtil.defaultHandleParams()
+      params.request.method = 'GET'
+      params.request.url = '/inexistent.ext'
+
+      jest
+        .spyOn(Controller.prototype, Controller.prototype.getFileStream.name)
+        .mockImplementationOnce(() => {
+          throw new Error('ENOENT')
+        })
+
+      await handler(...params.values())
+
+      expect(params.response.writeHead).toHaveBeenCalledWith(404)
+      expect(params.response.end).toHaveBeenCalled()
+    })
 
     it.todo('given an error it should respond with 500')
   })
