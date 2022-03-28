@@ -18,5 +18,7 @@ export const config = {
     home: `home/index.html`,
     controller: `controller/index.html`
   },
-  location: '/home'
+  location: {
+    home: `/home`
+  }
 }
