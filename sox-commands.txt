@@ -1,0 +1,36 @@
+# get information file
+sox \
+--info \
+"audio/songs/conversation.mp3"
+
+# get information file
+sox \
+--info \
+"audio/fx/Boo! Sound Effect (128 kbps).mp3"
+
+# manipulate file
+sox \
+--volume 0.99 \
+--type mp3 \
+"audio/fx/Audience Applause - Gaming Sound Effect (HD) (128 kbps).mp3" \
+--rate 48000 \
+--type mp3 \
+"output.mp3"
+
+# get specific data from file
+sox \
+--info \
+-B \
+"audio/fx/Boo! Sound Effect (128 kbps).mp3"
+
+# concatenate 2 audios
+sox \
+--combine mix \
+--type mp3 \
+--volume 0.99 \
+"audio/songs/conversation.mp3" \
+--type mp3 \
+--volume 0.99 \
+"audio/fx/Fart - Gaming Sound Effect (HD) (128 kbps).mp3" \
+--type mp3 \
+"put-put.mp3"
