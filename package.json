@@ -24,7 +24,8 @@
   "license": "ISC",
   "dependencies": {
     "pino": "7.9.2",
-    "pino-pretty": "7.6.0"
+    "pino-pretty": "7.6.0",
+    "throttle": "1.0.3"
   },
   "devDependencies": {
     "jest": "27.5.1",
