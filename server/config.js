@@ -25,5 +25,11 @@ export const config = {
     '.html': 'text/html',
     '.css': 'text/css',
     '.js': 'text/javascript'
+  },
+  audioSetup: {
+    mediaType: 'mp3',
+    volume: '0.99',
+    bitRate: '128000',
+    conversation: join(root, 'audio', 'songs', 'conversation.mp3')
   }
 }
