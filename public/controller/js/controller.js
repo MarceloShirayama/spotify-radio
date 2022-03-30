@@ -5,6 +5,13 @@ export class Controller {
   }
 
   static initialize(deps) {
-    return new Controller(deps)
+    const controller = new Controller(deps)
+    controller.onLoad()
+
+    return controller
+  }
+
+  onLoad() {
+    this.view.onLoad()
   }
 }
