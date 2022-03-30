@@ -105,8 +105,7 @@ describe('#Routes - test site from API response', () => {
     expect(params.response.writeHead).not.toHaveBeenCalled()
   })
 
-  it(`
-    POST /unknown - given an inexistent route it should response with 404
+  it(`POST /unknown - given an inexistent route it should response with 404
     `, async () => {
     const params = TestUtil.defaultHandleParams()
     params.request.method = 'POST'
@@ -116,6 +115,50 @@ describe('#Routes - test site from API response', () => {
 
     expect(params.response.writeHead).toHaveBeenCalledWith(404)
     expect(params.response.end).toHaveBeenCalled()
+  })
+
+  it('GET /stream?id=123 - should call createClientStream', async () => {
+    const params = TestUtil.defaultHandleParams()
+    params.request.method = 'GET'
+    params.request.url = '/stream?id=123'
+
+    const stream = TestUtil.generateReadableStream(['test'])
+
+    jest.spyOn(stream, 'pipe').mockImplementationOnce()
+
+    const onClose = jest.fn()
+
+    jest
+      .spyOn(Controller.prototype, 'createClientStream')
+      .mockReturnValueOnce({ stream, onClose })
+
+    await handler(...params.values())
+    params.request.emit('close')
+
+    expect(stream.pipe).toHaveBeenCalledWith(params.response)
+    expect(Controller.prototype.createClientStream).toHaveBeenCalledTimes(1)
+    expect(params.response.writeHead).toHaveBeenCalledWith(200, {
+      'Content-Type': 'audio/mpeg',
+      'Accept-Ranges': 'bytes'
+    })
+  })
+
+  it('POST /controller - should call handleCommand', async () => {
+    const params = TestUtil.defaultHandleParams()
+    params.request.method = 'POST'
+    params.request.url = '/controller'
+    const cmd = { command: 'start' }
+    params.request.push(JSON.stringify(cmd))
+    const result = { result: 'any_result' }
+
+    jest
+      .spyOn(Controller.prototype, Controller.prototype.handleCommand.name)
+      .mockReturnValueOnce(result)
+
+    await handler(...params.values())
+
+    expect(Controller.prototype.handleCommand).toHaveBeenCalledWith(cmd)
+    expect(params.response.end).toHaveBeenCalledWith(JSON.stringify(result))
   })
 
   describe('exceptions', () => {

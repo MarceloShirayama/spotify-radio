@@ -9,7 +9,7 @@ export class Controller {
     return this.service.getFileStream(filename)
   }
 
-  async handleCommand({ command }) {
+  handleCommand({ command }) {
     const result = { result: 'ok' }
     logger.info(`Received command: ${command}`)
     const cmd = command.toLowerCase()
@@ -21,6 +21,7 @@ export class Controller {
       this.service.stopStreaming()
       return result
     }
+    return { result: 'error', message: `Unknown command: ${command}` }
   }
 
   createClientStream() {
