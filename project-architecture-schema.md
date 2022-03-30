@@ -8,3 +8,10 @@
 - server: responsible for creating the server, but does not instance it;
 - index: instances the server and exposes it to the web (infrastructure side);
 - config: everything that is static in the project.
+
+### Client
+
+- service: everything that is a business rule or processing;
+- controller: intermediate the presentation layer and the business layer;
+- view: everything that is HTML element;
+- index: who initializes everything (factory).
