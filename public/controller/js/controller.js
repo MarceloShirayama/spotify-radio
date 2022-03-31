@@ -12,7 +12,7 @@ export class Controller {
   }
 
   async commandReceived(text) {
-    return this.service.makeRequest({ command: text })
+    return this.service.makeRequest({ command: text.toLowerCase() })
   }
 
   onLoad() {

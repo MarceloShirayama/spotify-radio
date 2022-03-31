@@ -21,7 +21,8 @@ export class Controller {
       this.service.stopStreaming()
       return result
     }
-    return { result: 'error', message: `Unknown command: ${command}` }
+    // return { result: 'error', message: `Unknown command: ${command}` }
+    return result
   }
 
   createClientStream() {
