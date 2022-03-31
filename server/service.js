@@ -109,4 +109,66 @@ export class Service {
       type
     }
   }
+
+  async readFxByName(fxName) {
+    const fxDir = await fsPromises.readdir(config.dir.fx)
+    const chosenSong = fxDir.find((file) => file.toLowerCase().includes(fxName))
+    if (!chosenSong) return await Promise.reject(`No song found for ${fxName}`)
+
+    return join(config.dir.fx, chosenSong)
+  }
+
+  appendFxStream(fx) {
+    const throttleTransformable = new Throttle(this.currentBitRate)
+    streamsPromises.pipeline(throttleTransformable, this.broadcast())
+
+    const unpipe = () => {
+      const transformStream = this.mergeAudioStreams(fx, this.currentReadable)
+      this.throttleTransform = throttleTransformable
+      this.currentReadable = transformStream
+      this.currentReadable.removeListener('unpipe', unpipe)
+
+      streamsPromises.pipeline(transformStream, throttleTransformable)
+    }
+
+    this.throttleTransform.on('unpipe', unpipe)
+    this.throttleTransform.pause()
+    this.currentReadable.unpipe(this.throttleTransform)
+  }
+
+  mergeAudioStreams(song, readable) {
+    const transformStream = PassThrough()
+
+    const args = [
+      '--type',
+      config.audioSetup.mediaType,
+      '--volume',
+      config.audioSetup.volume,
+      '-m',
+      '-',
+      '--type',
+      config.audioSetup.mediaType,
+      '--volume',
+      config.audioSetup.fxVolume,
+      song,
+      '--type',
+      config.audioSetup.mediaType,
+      '-'
+    ]
+
+    const { stdout, stdin } = this._executeSoxCommand(args)
+
+    streamsPromises
+      .pipeline(readable, stdin)
+      .catch((error) =>
+        logger.error(`Error on sending stream to sox: ${error}`)
+      )
+    streamsPromises
+      .pipeline(stdout, transformStream)
+      .catch((error) =>
+        logger.error(`Error on receiving stream from sox: ${error}`)
+      )
+
+    return transformStream
+  }
 }

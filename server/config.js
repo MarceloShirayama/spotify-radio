@@ -29,6 +29,7 @@ export const config = {
   audioSetup: {
     mediaType: 'mp3',
     volume: '0.99',
+    fxVolume: '0.1',
     bitRate: '128000',
     bitRateDivisor: 8,
     conversation: join(root, 'audio', 'songs', 'conversation.mp3')
