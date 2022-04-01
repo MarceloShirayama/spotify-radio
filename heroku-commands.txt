@@ -1,0 +1,18 @@
+heroku.yml
+
+heroku login
+
+heroku apps:create spotify-radio-shira
+git add heroku.yml
+git commit -m "Add heroku.yml"
+
+git remote -v
+heroku stack:set container
+
+git push heroku main
+
+heroku open
+
+heroku logs -t -a spotify-radio-shira
+
+heroku apps:delete spotify-radio-shira
